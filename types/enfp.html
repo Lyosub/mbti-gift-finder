@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>재기발랄한 활동가에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">폴라로이드 카메라</span><span class="reason">즉흥적인 순간을 기록하고 싶어해요.</span><a class="buy" href="https://www.coupang.com/np/search?q=폴라로이드+카메라" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">여행 상품권</span><span class="reason">새로운 곳에 대한 갈증이 있습니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=여행+상품권" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">생일파티 풍선세트</span><span class="reason">이벤트 분위기 메이커예요.</span><a class="buy" href="https://www.coupang.com/np/search?q=생일파티+풍선세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">컬러 무선이어폰</span><span class="reason">개성 있는 디자인 취향과 잘 맞아요.</span><a class="buy" href="https://www.coupang.com/np/search?q=컬러+무선이어폰" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">방탈출카페 이용권</span><span class="reason">새로운 경험을 좋아합니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=방탈출카페+이용권" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("ENFP", "재기발랄한 활동가");</script>
+<script>
+var giftPool = [
+  {name:"폴라로이드 카메라", reason:"즉흥적인 순간을 기록하고 싶어해요.", query:"폴라로이드 카메라"},
+  {name:"여행 상품권", reason:"새로운 곳에 대한 갈증이 있습니다.", query:"여행 상품권"},
+  {name:"생일파티 풍선세트", reason:"이벤트 분위기 메이커예요.", query:"생일파티 풍선세트"},
+  {name:"컬러 무선이어폰", reason:"개성 있는 디자인 취향과 잘 맞아요.", query:"컬러 무선이어폰"},
+  {name:"방탈출카페 이용권", reason:"새로운 경험을 좋아합니다.", query:"방탈출카페 이용권"},
+  {name:"여행용 파우치 세트", reason:"떠나고 싶을 때 바로 챙기는 실용템이에요.", query:"여행용 파우치 세트"},
+  {name:"다이어리 꾸미기 스티커", reason:"꾸미기 좋아하는 취향을 저격합니다.", query:"다이어리 꾸미기 스티커"},
+  {name:"LED 스트링조명", reason:"분위기를 살리는 걸 좋아해요.", query:"LED 스트링조명"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("ENFP", "재기발랄한 활동가");
+</script>
 </body>
 </html>

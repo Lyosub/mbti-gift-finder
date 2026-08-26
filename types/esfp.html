@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>자유로운 영혼의 연예인에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">미니 파티스피커</span><span class="reason">어디서든 분위기 메이커가 됩니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=미니+파티스피커" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">셀카봉 폴라로이드</span><span class="reason">순간을 남기는 걸 좋아해요.</span><a class="buy" href="https://www.coupang.com/np/search?q=셀카봉+폴라로이드" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">트렌디 주얼리</span><span class="reason">눈에 띄는 스타일을 선호합니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=트렌디+주얼리" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">페스티벌 티켓</span><span class="reason">사람들과 어울리는 자리를 좋아해요.</span><a class="buy" href="https://www.coupang.com/np/search?q=페스티벌+티켓" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">디자인 파우치</span><span class="reason">실용적이면서 눈에 띄는 아이템.</span><a class="buy" href="https://www.coupang.com/np/search?q=디자인+파우치" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("ESFP", "자유로운 영혼의 연예인");</script>
+<script>
+var giftPool = [
+  {name:"미니 파티스피커", reason:"어디서든 분위기 메이커가 됩니다.", query:"미니 파티스피커"},
+  {name:"셀카봉 폴라로이드", reason:"순간을 남기는 걸 좋아해요.", query:"셀카봉 폴라로이드"},
+  {name:"트렌디 주얼리", reason:"눈에 띄는 스타일을 선호합니다.", query:"트렌디 주얼리"},
+  {name:"페스티벌 티켓", reason:"사람들과 어울리는 자리를 좋아해요.", query:"페스티벌 티켓"},
+  {name:"디자인 파우치", reason:"실용적이면서 눈에 띄는 아이템.", query:"디자인 파우치"},
+  {name:"트렌디 선글라스", reason:"눈에 띄는 스타일을 완성해줘요.", query:"트렌디 선글라스"},
+  {name:"포토 프레임 굿즈", reason:"순간을 기록하고 자랑하는 걸 좋아합니다.", query:"포토 프레임 굿즈"},
+  {name:"미니 가습기", reason:"실용적이면서 예쁜 데스크템이에요.", query:"미니 가습기"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("ESFP", "자유로운 영혼의 연예인");
+</script>
 </body>
 </html>

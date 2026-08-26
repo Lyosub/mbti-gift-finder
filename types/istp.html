@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>만능 재주꾼에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">멀티툴 캠핑용품</span><span class="reason">손으로 뭔가 만지는 걸 좋아해요.</span><a class="buy" href="https://www.coupang.com/np/search?q=멀티툴+캠핑용품" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">방수 스포츠시계</span><span class="reason">활동적인 라이프스타일과 잘 맞습니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=방수+스포츠시계" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">휴대용 블루투스스피커</span><span class="reason">야외활동에도 잘 어울려요.</span><a class="buy" href="https://www.coupang.com/np/search?q=휴대용+블루투스스피커" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">캠핑용품 세트</span><span class="reason">몸으로 하는 취미를 지지해줍니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=캠핑용품+세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">미니 공구세트</span><span class="reason">뭔가 만들고 고치는 걸 즐깁니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=미니+공구세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("ISTP", "만능 재주꾼");</script>
+<script>
+var giftPool = [
+  {name:"멀티툴 캠핑용품", reason:"손으로 뭔가 만지는 걸 좋아해요.", query:"멀티툴 캠핑용품"},
+  {name:"방수 스포츠시계", reason:"활동적인 라이프스타일과 잘 맞습니다.", query:"방수 스포츠시계"},
+  {name:"휴대용 블루투스스피커", reason:"야외활동에도 잘 어울려요.", query:"휴대용 블루투스스피커"},
+  {name:"캠핑용품 세트", reason:"몸으로 하는 취미를 지지해줍니다.", query:"캠핑용품 세트"},
+  {name:"미니 공구세트", reason:"뭔가 만들고 고치는 걸 즐깁니다.", query:"미니 공구세트"},
+  {name:"차량용 정리함", reason:"직접 관리하는 걸 좋아하는 타입이에요.", query:"차량용 정리함"},
+  {name:"대용량 보조배터리", reason:"야외활동에 실용적인 필수템입니다.", query:"대용량 보조배터리"},
+  {name:"미니 드라이버세트", reason:"직접 손보는 걸 즐기는 성향이에요.", query:"미니 드라이버세트"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("ISTP", "만능 재주꾼");
+</script>
 </body>
 </html>

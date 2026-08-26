@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>뜨거운 논쟁가에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">미니 빔프로젝터</span><span class="reason">화제성과 실용을 동시에 잡을 수 있어요.</span><a class="buy" href="https://www.coupang.com/np/search?q=미니+빔프로젝터" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">파티 보드게임</span><span class="reason">사람들과 어울려 노는 걸 즐깁니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=파티+보드게임" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">위트있는 디자인 티셔츠</span><span class="reason">유머 코드를 저격하는 아이템이에요.</span><a class="buy" href="https://www.coupang.com/np/search?q=위트있는+디자인+티셔츠" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">캡슐커피머신</span><span class="reason">새로운 걸 계속 시도하는 취향과 잘 맞아요.</span><a class="buy" href="https://www.coupang.com/np/search?q=캡슐커피머신" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">경량 여행 백팩</span><span class="reason">즉흥적인 여행 욕구를 채워줍니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=경량+여행+백팩" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("ENTP", "뜨거운 논쟁가");</script>
+<script>
+var giftPool = [
+  {name:"미니 빔프로젝터", reason:"화제성과 실용을 동시에 잡을 수 있어요.", query:"미니 빔프로젝터"},
+  {name:"파티 보드게임", reason:"사람들과 어울려 노는 걸 즐깁니다.", query:"파티 보드게임"},
+  {name:"위트있는 디자인 티셔츠", reason:"유머 코드를 저격하는 아이템이에요.", query:"위트있는 디자인 티셔츠"},
+  {name:"캡슐커피머신", reason:"새로운 걸 계속 시도하는 취향과 잘 맞아요.", query:"캡슐커피머신"},
+  {name:"경량 여행 백팩", reason:"즉흥적인 여행 욕구를 채워줍니다.", query:"경량 여행 백팩"},
+  {name:"스마트 텀블러", reason:"신박한 신제품에 먼저 반응하는 타입이에요.", query:"스마트 텀블러"},
+  {name:"즉석카메라 필름", reason:"순간을 재치있게 기록하는 걸 좋아합니다.", query:"즉석카메라 필름"},
+  {name:"신박한 카드게임", reason:"대화거리가 되는 게임을 좋아해요.", query:"신박한 카드게임"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("ENTP", "뜨거운 논쟁가");
+</script>
 </body>
 </html>

@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>대담한 통솔자에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">가죽 명함지갑</span><span class="reason">격식과 실용을 동시에 챙길 수 있어요.</span><a class="buy" href="https://www.coupang.com/np/search?q=가죽+명함지갑" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">스마트워치</span><span class="reason">시간과 건강 관리를 한번에 할 수 있습니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=스마트워치" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">보온 텀블러 선물세트</span><span class="reason">바쁜 하루에도 챙기는 디테일이 좋아요.</span><a class="buy" href="https://www.coupang.com/np/search?q=보온+텀블러+선물세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">온라인 클래스 수강권</span><span class="reason">성장에 진심인 타입에게 잘 맞습니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=온라인+클래스+수강권" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">무선충전 데스크 정리대</span><span class="reason">책상 위를 효율적으로 정리해줍니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=무선충전+데스크+정리대" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("ENTJ", "대담한 통솔자");</script>
+<script>
+var giftPool = [
+  {name:"가죽 명함지갑", reason:"격식과 실용을 동시에 챙길 수 있어요.", query:"가죽 명함지갑"},
+  {name:"스마트워치", reason:"시간과 건강 관리를 한번에 할 수 있습니다.", query:"스마트워치"},
+  {name:"보온 텀블러 선물세트", reason:"바쁜 하루에도 챙기는 디테일이 좋아요.", query:"보온 텀블러 선물세트"},
+  {name:"온라인 클래스 수강권", reason:"성장에 진심인 타입에게 잘 맞습니다.", query:"온라인 클래스 수강권"},
+  {name:"무선충전 데스크 정리대", reason:"책상 위를 효율적으로 정리해줍니다.", query:"무선충전 데스크 정리대"},
+  {name:"프리미엄 볼펜", reason:"격식있는 자리에서 쓰기 좋은 아이템입니다.", query:"프리미엄 볼펜"},
+  {name:"무선 프레젠터", reason:"발표와 리더십에 도움되는 도구예요.", query:"무선 프레젠터"},
+  {name:"가죽 서류가방", reason:"커리어에 어울리는 품격있는 아이템입니다.", query:"가죽 서류가방"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("ENTJ", "대담한 통솔자");
+</script>
 </body>
 </html>

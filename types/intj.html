@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>용의주도한 전략가에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">미니멀 디자인 무선 이어폰</span><span class="reason">여러 기기를 오가며 효율적으로 쓰는 걸 좋아해요.</span><a class="buy" href="https://www.coupang.com/np/search?q=미니멀+무선+이어폰" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">모니터암</span><span class="reason">자기 작업 환경을 최적화하는 데 진심입니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=모니터암" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">몰스킨 다이어리+만년필 세트</span><span class="reason">장기 목표를 기록하는 걸 즐깁니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=몰스킨+다이어리+세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">노이즈 캔슬링 헤드폰</span><span class="reason">혼자 몰입할 시간을 확보해주는 선물이에요.</span><a class="buy" href="https://www.coupang.com/np/search?q=노이즈캔슬링+헤드폰" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">홈카페 드립커피 세트</span><span class="reason">루틴을 정교하게 다듬는 취향을 저격합니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=홈카페+드립커피+세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("INTJ", "용의주도한 전략가");</script>
+<script>
+var giftPool = [
+  {name:"미니멀 디자인 무선 이어폰", reason:"여러 기기를 오가며 효율적으로 쓰는 걸 좋아해요.", query:"미니멀 무선 이어폰"},
+  {name:"모니터암", reason:"자기 작업 환경을 최적화하는 데 진심입니다.", query:"모니터암"},
+  {name:"몰스킨 다이어리+만년필 세트", reason:"장기 목표를 기록하는 걸 즐깁니다.", query:"몰스킨 다이어리 세트"},
+  {name:"노이즈 캔슬링 헤드폰", reason:"혼자 몰입할 시간을 확보해주는 선물이에요.", query:"노이즈캔슬링 헤드폰"},
+  {name:"홈카페 드립커피 세트", reason:"루틴을 정교하게 다듬는 취향을 저격합니다.", query:"홈카페 드립커피 세트"},
+  {name:"스마트 무드조명", reason:"공간을 효율적으로 제어하는 걸 좋아해요.", query:"스마트 무드조명"},
+  {name:"휴대용 노트북 거치대", reason:"작업 환경 최적화에 진심인 타입입니다.", query:"휴대용 노트북 거치대"},
+  {name:"시스템 다이어리", reason:"장기 목표를 전략적으로 계획하는 걸 즐깁니다.", query:"시스템 다이어리"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("INTJ", "용의주도한 전략가");
+</script>
 </body>
 </html>

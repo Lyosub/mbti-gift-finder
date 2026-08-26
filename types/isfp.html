@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>호기심 많은 예술가에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">니치 향수</span><span class="reason">은은한 취향을 저격하는 아이템이에요.</span><a class="buy" href="https://www.coupang.com/np/search?q=니치+향수" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">수채화 드로잉 세트</span><span class="reason">예술적 감각을 발휘할 수 있는 취미입니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=수채화+드로잉+세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">미니 화분 선물</span><span class="reason">조용히 곁에 두는 힐링템이에요.</span><a class="buy" href="https://www.coupang.com/np/search?q=미니+화분+선물" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">디자인 문구세트</span><span class="reason">예쁜 것에 대한 애정이 있습니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=디자인+문구세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">라이프스타일 굿즈</span><span class="reason">취향이 담긴 소품을 좋아해요.</span><a class="buy" href="https://www.coupang.com/np/search?q=라이프스타일+굿즈" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("ISFP", "호기심 많은 예술가");</script>
+<script>
+var giftPool = [
+  {name:"니치 향수", reason:"은은한 취향을 저격하는 아이템이에요.", query:"니치 향수"},
+  {name:"수채화 드로잉 세트", reason:"예술적 감각을 발휘할 수 있는 취미입니다.", query:"수채화 드로잉 세트"},
+  {name:"미니 화분 선물", reason:"조용히 곁에 두는 힐링템이에요.", query:"미니 화분 선물"},
+  {name:"디자인 문구세트", reason:"예쁜 것에 대한 애정이 있습니다.", query:"디자인 문구세트"},
+  {name:"라이프스타일 굿즈", reason:"취향이 담긴 소품을 좋아해요.", query:"라이프스타일 굿즈"},
+  {name:"인센스 세트", reason:"은은한 분위기를 즐기는 타입이에요.", query:"인센스 세트"},
+  {name:"원목 트레이", reason:"자연스러운 감성 소재를 선호합니다.", query:"원목 트레이"},
+  {name:"카메라 스트랩", reason:"디테일까지 취향을 반영하는 아이템이에요.", query:"카메라 스트랩"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("ISFP", "호기심 많은 예술가");
+</script>
 </body>
 </html>

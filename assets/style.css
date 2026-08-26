@@ -266,6 +266,11 @@ header.site nav a {
   margin-bottom: 16px;
 }
 
+.gift-zone .sub #weekLabel {
+  color: #ff9f1c;
+  font-weight: 700;
+}
+
 .gift-grid {
   display: grid;
   gap: 12px;

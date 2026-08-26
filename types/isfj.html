@@ -31,29 +31,8 @@
   </div>
   <section class="gift-zone">
     <h2>용감한 수호자에게 어울리는 선물 5</h2>
-    <p class="sub">카드를 눌러서 확인해보세요</p>
-    <div class="gift-grid">
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 1</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">극세사 담요</span><span class="reason">포근함과 실용성을 동시에 챙깁니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=극세사+담요" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 2</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">홈웨어 세트</span><span class="reason">편안한 일상을 챙겨주는 선물이에요.</span><a class="buy" href="https://www.coupang.com/np/search?q=홈웨어+세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 3</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">핸드크림 선물세트</span><span class="reason">소소하지만 매일 쓰는 물건입니다.</span><a class="buy" href="https://www.coupang.com/np/search?q=핸드크림+선물세트" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 4</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">주방정리 소품</span><span class="reason">살림에 도움되는 실용템이에요.</span><a class="buy" href="https://www.coupang.com/np/search?q=주방정리+소품" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-      <div class="gift-card"><div class="gift-inner">
-        <div class="gift-face gift-front"><span>선물 5</span><span class="tap-hint">눌러서 확인</span></div>
-        <div class="gift-face gift-back"><span class="name">목어깨 안마기</span><span class="reason">남을 챙기느라 지친 몸을 위한 선물.</span><a class="buy" href="https://www.coupang.com/np/search?q=목어깨+안마기" target="_blank" rel="noopener sponsored">쿠팡에서 보기 →</a></div>
-      </div></div>
-    </div>
+    <p class="sub"><span id="weekLabel">이번 주</span> 추천 · 매주 새로운 5가지로 바뀌어요</p>
+    <div class="gift-grid" id="giftGrid"></div>
   </section>
   <div class="share-bar">
     <button id="shareBtn">공유하기</button>
@@ -69,6 +48,19 @@
 </div>
 <footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
 <script src="../assets/script.js"></script>
-<script>initGiftCards(); initShare("ISFJ", "용감한 수호자");</script>
+<script>
+var giftPool = [
+  {name:"극세사 담요", reason:"포근함과 실용성을 동시에 챙깁니다.", query:"극세사 담요"},
+  {name:"홈웨어 세트", reason:"편안한 일상을 챙겨주는 선물이에요.", query:"홈웨어 세트"},
+  {name:"핸드크림 선물세트", reason:"소소하지만 매일 쓰는 물건입니다.", query:"핸드크림 선물세트"},
+  {name:"주방정리 소품", reason:"살림에 도움되는 실용템이에요.", query:"주방정리 소품"},
+  {name:"목어깨 안마기", reason:"남을 챙기느라 지친 몸을 위한 선물.", query:"목어깨 안마기"},
+  {name:"발마사지기", reason:"하루종일 챙기느라 지친 몸을 위한 선물이에요.", query:"발마사지기"},
+  {name:"수면 스프레이", reason:"편안한 잠자리를 챙겨주는 선물입니다.", query:"수면 스프레이"},
+  {name:"예쁜 앞치마", reason:"살림에 도움되는 정겨운 선물이에요.", query:"예쁜 앞치마"}
+];
+renderGiftGrid(giftPool, "giftGrid");
+initShare("ISFJ", "용감한 수호자");
+</script>
 </body>
 </html>
