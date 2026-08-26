@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lyosub.github.io/mbti-gift-finder/sitemap.xml
+Sitemap: https://mbtigift.com/sitemap.xml
