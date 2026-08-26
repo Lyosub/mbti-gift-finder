@@ -163,6 +163,73 @@ header.site nav a {
 .badge.nf { background: var(--nf); }
 .badge.sj { background: var(--sj); }
 .badge.sp { background: var(--sp); }
+.badge.guide { background: #55575c; }
+
+.article ul, .article ol {
+  padding-left: 20px;
+  margin: 0 0 14px;
+}
+
+.article li {
+  margin-bottom: 8px;
+}
+
+.article h2 {
+  font-size: 18px;
+  margin: 28px 0 10px;
+}
+
+.guide-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.guide-card {
+  display: block;
+  text-decoration: none;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.guide-card .g-title {
+  font-weight: 700;
+  font-size: 15.5px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.guide-card .g-desc {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.game-frame {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0e0e10;
+}
+
+.game-frame iframe {
+  display: block;
+  width: 100%;
+  height: min(640px, 80vh);
+  border: none;
+}
+
+.ad-slot {
+  margin: 22px 0;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 11.5px;
+  color: #b0b0b5;
+}
 
 .type-hero h1 {
   font-size: 25px;

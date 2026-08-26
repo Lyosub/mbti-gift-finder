@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>선물 캐치 게임</title>
+<meta name="description" content="떨어지는 선물을 받고 폭탄은 피하는 1분 캐주얼 게임">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #14141a;
+    font-family: "Pretendard", -apple-system, "Malgun Gothic", sans-serif;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  .wrap {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    max-height: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: #1b1b22;
+  }
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .hud .timer {
+    font-variant-numeric: tabular-nums;
+    color: #ffd166;
+  }
+  .ad-slot {
+    margin: 0 10px 8px;
+    padding: 8px;
+    border: 1px dashed #3a3a42;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 10.5px;
+    color: #7a7a82;
+    flex-shrink: 0;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    flex: 1;
+    touch-action: none;
+    background: linear-gradient(180deg, #232333 0%, #17171f 100%);
+  }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,14,0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+  }
+  .overlay.hidden { display: none; }
+  .panel {
+    text-align: center;
+    color: #fff;
+    padding: 24px;
+    max-width: 320px;
+  }
+  .panel h1 { font-size: 22px; margin: 0 0 10px; }
+  .panel p { font-size: 14px; color: #c7c7cf; line-height: 1.6; margin: 0 0 18px; }
+  .panel .score-big { font-size: 40px; font-weight: 800; color: #ffd166; margin: 6px 0 18px; }
+  button.playbtn {
+    background: #ffd166;
+    color: #1b1b22;
+    border: none;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  button.playbtn:active { transform: scale(0.96); }
+  .home-link {
+    display: block;
+    margin-top: 14px;
+    color: #8f8f98;
+    font-size: 12.5px;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hud">
+    <div>🎁 <span id="score">0</span></div>
+    <div class="timer" id="timer">75</div>
+    <div id="lives">❤️❤️❤️</div>
+  </div>
+
+  <div class="ad-slot">광고 영역 (애드센스 승인 후 삽입)</div>
+
+  <canvas id="game"></canvas>
+
+  <div class="overlay" id="startOverlay">
+    <div class="panel">
+      <h1>🎁 선물 캐치</h1>
+      <p>바구니를 좌우로 움직여서 떨어지는 선물🎁을 받으세요.<br>폭탄💣을 받으면 목숨이 하나 사라져요.<br>별⭐은 보너스 점수!</p>
+      <button class="playbtn" id="startBtn">게임 시작</button>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="overOverlay">
+    <div class="panel">
+      <h1>게임 종료!</h1>
+      <div class="score-big"><span id="finalScore">0</span>점</div>
+      <div class="ad-slot" style="margin:0 0 18px;">광고 영역 (애드센스 승인 후 삽입)</div>
+      <button class="playbtn" id="retryBtn">다시하기</button>
+      <a class="home-link" href="../index.html">← MBTI 선물찾기 홈으로</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var canvas = document.getElementById('game');
+  var ctx = canvas.getContext('2d');
+  var scoreEl = document.getElementById('score');
+  var timerEl = document.getElementById('timer');
+  var livesEl = document.getElementById('lives');
+  var startOverlay = document.getElementById('startOverlay');
+  var overOverlay = document.getElementById('overOverlay');
+  var finalScoreEl = document.getElementById('finalScore');
+
+  var ROUND_TIME = 75;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var W, H;
+
+  function resize() {
+    var rect = canvas.getBoundingClientRect();
+    W = rect.width;
+    H = rect.height;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+
+  var basket = { x: 0, y: 0, w: 70, h: 40, targetX: 0 };
+  var items = [];
+  var score = 0;
+  var lives = 3;
+  var timeLeft = ROUND_TIME;
+  var running = false;
+  var lastSpawn = 0;
+  var elapsed = 0;
+  var lastFrame = 0;
+  var hitFlash = 0;
+
+  function reset() {
+    score = 0;
+    lives = 3;
+    timeLeft = ROUND_TIME;
+    items = [];
+    elapsed = 0;
+    lastSpawn = 0;
+    hitFlash = 0;
+    basket.x = W / 2 - basket.w / 2;
+    basket.targetX = basket.x;
+    scoreEl.textContent = '0';
+    timerEl.textContent = ROUND_TIME;
+    updateLives();
+  }
+
+  function updateLives() {
+    var s = '';
+    for (var i = 0; i < lives; i++) s += '❤️';
+    for (var i = lives; i < 3; i++) s += '🖤';
+    livesEl.textContent = s;
+  }
+
+  function spawnItem() {
+    var roll = Math.random();
+    var type = 'gift';
+    if (roll < 0.22) type = 'bomb';
+    else if (roll < 0.30) type = 'star';
+    var size = 34;
+    items.push({
+      x: Math.random() * (W - size) + size / 2,
+      y: -size,
+      size: size,
+      type: type,
+      speed: currentSpeed() + Math.random() * 0.6
+    });
+  }
+
+  function currentSpeed() {
+    return 2.4 + Math.min(elapsed / 10, 6) * 0.35;
+  }
+
+  function currentSpawnInterval() {
+    return Math.max(950 - Math.min(elapsed / 10, 6) * 90, 380);
+  }
+
+  function emojiFor(type) {
+    if (type === 'bomb') return '💣';
+    if (type === 'star') return '⭐';
+    return '🎁';
+  }
+
+  function drawBasket() {
+    ctx.save();
+    ctx.translate(basket.x, basket.y);
+    var flashOn = hitFlash > 0 && Math.floor(hitFlash / 4) % 2 === 0;
+    ctx.fillStyle = flashOn ? '#ff6b6b' : '#c98a4b';
+    ctx.beginPath();
+    ctx.moveTo(4, 8);
+    ctx.lineTo(basket.w - 4, 8);
+    ctx.lineTo(basket.w - 10, basket.h);
+    ctx.lineTo(10, basket.h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#8a5a2b';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = '#e0a868';
+    ctx.fillRect(0, 0, basket.w, 8);
+    ctx.restore();
+  }
+
+  function loop(ts) {
+    if (!running) return;
+    var dt = lastFrame ? (ts - lastFrame) : 16;
+    lastFrame = ts;
+    elapsed += dt / 1000;
+
+    if (hitFlash > 0) hitFlash -= 1;
+
+    basket.x += (basket.targetX - basket.x) * 0.25;
+    basket.x = Math.max(0, Math.min(W - basket.w, basket.x));
+
+    if (ts - lastSpawn > currentSpawnInterval()) {
+      spawnItem();
+      lastSpawn = ts;
+    }
+
+    for (var i = items.length - 1; i >= 0; i--) {
+      var it = items[i];
+      it.y += it.speed * (dt / 16);
+
+      var caught = it.y + it.size / 2 > basket.y &&
+                   it.y - it.size / 2 < basket.y + basket.h &&
+                   it.x > basket.x - it.size / 2 &&
+                   it.x < basket.x + basket.w + it.size / 2;
+
+      if (caught) {
+        if (it.type === 'bomb') {
+          lives -= 1;
+          hitFlash = 16;
+          updateLives();
+          if (lives <= 0) { items.splice(i, 1); endGame(); continue; }
+        } else if (it.type === 'star') {
+          score += 40;
+        } else {
+          score += 10;
+        }
+        scoreEl.textContent = score;
+        items.splice(i, 1);
+        continue;
+      }
+
+      if (it.y - it.size > H) {
+        items.splice(i, 1);
+      }
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = '30px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (var j = 0; j < items.length; j++) {
+      var g = items[j];
+      ctx.font = g.size + 'px sans-serif';
+      ctx.fillText(emojiFor(g.type), g.x, g.y);
+    }
+    drawBasket();
+
+    if (running) requestAnimationFrame(loop);
+  }
+
+  var timerInterval = null;
+  function startGame() {
+    resize();
+    reset();
+    startOverlay.classList.add('hidden');
+    overOverlay.classList.add('hidden');
+    running = true;
+    lastFrame = 0;
+    basket.y = H - basket.h - 14;
+    requestAnimationFrame(loop);
+    timerInterval = setInterval(function () {
+      timeLeft -= 1;
+      timerEl.textContent = Math.max(timeLeft, 0);
+      if (timeLeft <= 0) endGame();
+    }, 1000);
+  }
+
+  function endGame() {
+    running = false;
+    clearInterval(timerInterval);
+    finalScoreEl.textContent = score;
+    overOverlay.classList.remove('hidden');
+  }
+
+  document.getElementById('startBtn').addEventListener('click', startGame);
+  document.getElementById('retryBtn').addEventListener('click', startGame);
+
+  function pointerX(clientX) {
+    var rect = canvas.getBoundingClientRect();
+    return clientX - rect.left;
+  }
+
+  canvas.addEventListener('touchstart', function (e) {
+    e.preventDefault();
+    basket.targetX = pointerX(e.touches[0].clientX) - basket.w / 2;
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+    basket.targetX = pointerX(e.touches[0].clientX) - basket.w / 2;
+  }, { passive: false });
+
+  var mouseDown = false;
+  canvas.addEventListener('mousedown', function (e) {
+    mouseDown = true;
+    basket.targetX = pointerX(e.clientX) - basket.w / 2;
+  });
+  window.addEventListener('mouseup', function () { mouseDown = false; });
+  canvas.addEventListener('mousemove', function (e) {
+    if (mouseDown) basket.targetX = pointerX(e.clientX) - basket.w / 2;
+  });
+
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') basket.targetX -= 40;
+    if (e.key === 'ArrowRight') basket.targetX += 40;
+  });
+
+  resize();
+  basket.x = W / 2 - basket.w / 2;
+  basket.targetX = basket.x;
+  basket.y = H - basket.h - 14;
+})();
+</script>
+</body>
+</html>
