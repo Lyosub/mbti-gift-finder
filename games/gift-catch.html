@@ -187,8 +187,8 @@
   function spawnItem() {
     var roll = Math.random();
     var type = 'gift';
-    if (roll < 0.22) type = 'bomb';
-    else if (roll < 0.30) type = 'star';
+    if (roll < 0.30) type = 'bomb';
+    else if (roll < 0.37) type = 'star';
     var size = 34;
     items.push({
       x: Math.random() * (W - size) + size / 2,
@@ -200,11 +200,11 @@
   }
 
   function currentSpeed() {
-    return 2.4 + Math.min(elapsed / 10, 6) * 0.35;
+    return 3.2 + Math.min(elapsed / 8, 8) * 0.5;
   }
 
   function currentSpawnInterval() {
-    return Math.max(950 - Math.min(elapsed / 10, 6) * 90, 380);
+    return Math.max(760 - Math.min(elapsed / 8, 8) * 65, 280);
   }
 
   function emojiFor(type) {
