@@ -1,3 +1,2 @@
-// TODO: Supabase 프로젝트 생성 후 아래 두 값을 Project Settings > API 에서 복사해 넣으세요.
-var SUPABASE_URL = "__SUPABASE_URL__";
-var SUPABASE_ANON_KEY = "__SUPABASE_ANON_KEY__";
+var SUPABASE_URL = "https://qgyckdgxpbnnnteanaaw.supabase.co";
+var SUPABASE_ANON_KEY = "sb_publishable_1gKogZqz2lSJiLFFD6ywAA_sa2wXS-_";
