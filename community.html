@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내가 받은 선물 최고/최악 제보 | MBTI 선물찾기</title>
+<meta name="description" content="MBTI 유형별로 실제로 받아본 최고의 선물, 최악의 선물을 제보하고 투표해보세요. 다른 사람들의 생생한 선물 사연을 구경할 수 있어요.">
+<link rel="canonical" href="https://mbtigift.com/community.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="내가 받은 선물 최고/최악 제보 | MBTI 선물찾기">
+<meta property="og:description" content="MBTI 유형별로 실제로 받아본 최고의 선물, 최악의 선물을 제보하고 투표해보세요.">
+<meta property="og:url" content="https://mbtigift.com/community.html">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="logo" href="index.html">🎁 MBTI 선물찾기</a>
+  <nav>
+    <a href="guides/index.html">가이드</a>
+    <a href="games/index.html">미니게임</a>
+    <a href="about.html">소개</a>
+  </nav>
+</header>
+<div class="wrap">
+  <section class="type-hero">
+    <span class="badge guide">커뮤니티</span>
+    <h1>내가 받은 선물, 최고 vs 최악</h1>
+    <p class="lead">진짜로 받아본 선물 이야기를 나눠주세요. 다른 사람들의 사연에 공감 투표도 할 수 있어요.</p>
+  </section>
+
+  <form class="community-form" id="reportForm">
+    <div>
+      <label for="typeInput">내 MBTI</label>
+      <select id="typeInput">
+        <option>INTJ</option><option>INTP</option><option>ENTJ</option><option>ENTP</option>
+        <option>INFJ</option><option>INFP</option><option>ENFJ</option><option>ENFP</option>
+        <option>ISTJ</option><option>ISFJ</option><option>ESTJ</option><option>ESFJ</option>
+        <option>ISTP</option><option>ISFP</option><option>ESTP</option><option>ESFP</option>
+      </select>
+    </div>
+    <div>
+      <label>어느 쪽인가요?</label>
+      <div class="kind-toggle">
+        <button type="button" data-kind="best" class="active">🏆 최고의 선물</button>
+        <button type="button" data-kind="worst">💀 최악의 선물</button>
+      </div>
+      <input type="hidden" id="kindInput" value="best">
+    </div>
+    <div>
+      <label for="titleInput">한 줄 요약</label>
+      <input type="text" id="titleInput" maxlength="60" placeholder="예: 남자친구가 준 직접 만든 앨범">
+    </div>
+    <div>
+      <label for="contentInput">자세한 사연</label>
+      <textarea id="contentInput" maxlength="500" placeholder="어떤 상황이었고 왜 최고/최악이었는지 적어주세요"></textarea>
+    </div>
+    <button type="submit">제보하기</button>
+    <p class="form-msg" id="formMsg"></p>
+  </form>
+
+  <div class="ad-slot">광고 영역 (예정)</div>
+
+  <div class="filter-tabs">
+    <button class="active" data-filter="all">전체</button>
+    <button data-filter="best">최고의 선물</button>
+    <button data-filter="worst">최악의 선물</button>
+  </div>
+
+  <div id="reportList"></div>
+
+  <div class="disclosure">제보된 내용은 검토 후 게시되며, 부적절한 내용은 게시되지 않을 수 있습니다. 공감 수는 기기별로 1회만 반영됩니다.</div>
+</div>
+<footer class="site">MBTI 선물찾기 · 이 사이트에서 소개하는 성향 설명은 통용되는 MBTI 유형론을 바탕으로 자체적으로 작성한 콘텐츠이며, 특정 기관의 공식 검사 결과를 대체하지 않습니다.</footer>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/community.js"></script>
+<script>
+initCommunityForm();
+initCommunityFilters();
+loadReports("all");
+</script>
+</body>
+</html>

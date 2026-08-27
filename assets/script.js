@@ -32,11 +32,14 @@ function pickWeekly(pool, count) {
   return picked;
 }
 
+var lastPicks = [];
+
 function renderGiftGrid(pool, containerId, count) {
   var container = document.getElementById(containerId);
   if (!container) return;
   count = count || 5;
   var picks = pickWeekly(pool, count);
+  lastPicks = picks;
 
   var labelEl = document.getElementById("weekLabel");
   if (labelEl) labelEl.textContent = weekLabel();
@@ -84,6 +87,114 @@ function initShare(typeCode, typeNick) {
       });
     });
   }
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  var words = text.split("");
+  var line = "";
+  var lines = [];
+  for (var i = 0; i < words.length; i++) {
+    var test = line + words[i];
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = words[i];
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  lines.forEach(function (l, idx) {
+    ctx.fillText(l, x, y + idx * lineHeight);
+  });
+  return lines.length;
+}
+
+function drawTasteCard(canvas, typeCode, typeNick, color) {
+  var W = 900, H = 1200;
+  canvas.width = W;
+  canvas.height = H;
+  var ctx = canvas.getContext("2d");
+
+  var grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, "#141416");
+  grad.addColorStop(1, "#1d1d21");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.18;
+  ctx.beginPath();
+  ctx.arc(W - 80, 120, 260, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = color;
+  ctx.font = "700 30px sans-serif";
+  ctx.fillText("MBTI 선물 취향 카드", 60, 110);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "800 130px sans-serif";
+  ctx.fillText(typeCode, 60, 300);
+
+  ctx.fillStyle = "#c7c7cc";
+  ctx.font = "500 34px sans-serif";
+  ctx.fillText(typeNick, 60, 355);
+
+  ctx.strokeStyle = "rgba(255,255,255,0.15)";
+  ctx.beginPath();
+  ctx.moveTo(60, 410);
+  ctx.lineTo(W - 60, 410);
+  ctx.stroke();
+
+  ctx.fillStyle = "#9c9ca3";
+  ctx.font = "700 24px sans-serif";
+  ctx.fillText("이번 주 나에게 어울리는 선물", 60, 470);
+
+  var names = lastPicks.slice(0, 3).map(function (p) { return p.name; });
+  var y = 540;
+  names.forEach(function (name, i) {
+    ctx.fillStyle = color;
+    ctx.font = "800 32px sans-serif";
+    ctx.fillText((i + 1) + ".", 60, y);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "600 32px sans-serif";
+    var used = wrapText(ctx, name, 110, y, W - 170, 40);
+    y += Math.max(used, 1) * 40 + 40;
+  });
+
+  ctx.fillStyle = "#6b6b70";
+  ctx.font = "600 26px sans-serif";
+  ctx.fillText("mbtigift.com 에서 내 유형 선물 보기", 60, H - 60);
+}
+
+function initTasteCard(typeCode, typeNick, color) {
+  var btn = document.getElementById("cardBtn");
+  if (!btn) return;
+  btn.addEventListener("click", function () {
+    var canvas = document.createElement("canvas");
+    drawTasteCard(canvas, typeCode, typeNick, color);
+    canvas.toBlob(function (blob) {
+      var file = new File([blob], typeCode.toLowerCase() + "-gift-card.png", { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({
+          files: [file],
+          title: typeCode + " 선물 취향 카드",
+          text: "나는 " + typeCode + "(" + typeNick + ") — 내 선물 취향 카드"
+        }).catch(function () {});
+      } else {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = typeCode.toLowerCase() + "-gift-card.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+        btn.textContent = "저장됨! (인스타에 올려보세요)";
+        setTimeout(function () { btn.textContent = "선물 카드 만들기"; }, 2000);
+      }
+    }, "image/png");
+  });
 }
 
 function initRandomButton() {
