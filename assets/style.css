@@ -702,3 +702,40 @@ footer.site {
   display: inline-block; background: #fff; color: var(--text); text-decoration: none;
   font-weight: 700; border-radius: 10px; padding: 10px 20px; font-size: 14px;
 }
+
+/* ===================== MBTI 간단 테스트 (test.html) ===================== */
+.mt-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 20px 18px; margin: 14px 0;
+}
+.mt-progress { height: 6px; border-radius: 999px; background: var(--border); overflow: hidden; }
+.mt-progress-bar { height: 100%; background: var(--nt); border-radius: 999px; transition: width .3s ease; }
+.mt-progress-text { font-size: 12px; color: var(--text-soft); margin: 8px 0 16px; text-align: right; }
+.mt-question { font-size: 17px; font-weight: 700; line-height: 1.5; margin: 4px 0 18px; letter-spacing: -0.02em; }
+.mt-opt {
+  display: block; width: 100%; text-align: left; margin-bottom: 10px;
+  padding: 15px 16px; border: 1.5px solid var(--border); border-radius: 12px;
+  background: #fff; font-size: 14.5px; font-family: inherit; cursor: pointer;
+  line-height: 1.45; transition: border-color .12s, background .12s;
+}
+.mt-opt:hover { border-color: var(--nt); }
+.mt-opt.sel { border-color: var(--nt); background: rgba(124,92,255,0.06); }
+.mt-prev {
+  margin-top: 6px; border: none; background: none; color: var(--text-soft);
+  font-size: 13px; font-family: inherit; cursor: pointer; padding: 6px 0;
+}
+
+#mtResult { text-align: center; padding: 20px 0 10px; }
+.mt-result-type {
+  font-size: 56px; font-weight: 800; letter-spacing: 2px; color: var(--nt);
+  margin-top: 10px; font-family: var(--font-trendy, inherit);
+}
+.mt-result-nick { font-size: 17px; font-weight: 700; margin-top: 2px; }
+.mt-result-lead { color: var(--text-soft); font-size: 14px; margin: 12px 0 20px; }
+.mt-result-btn {
+  display: inline-block; text-decoration: none; font-weight: 700; font-size: 15px;
+  background: var(--text); color: #fff; border-radius: 12px; padding: 14px 24px;
+}
+.mt-result-sub { margin-top: 18px; font-size: 13px; }
+.mt-result-sub a { color: var(--nt); text-decoration: none; }
+.mt-disclaimer { font-size: 11.5px; color: var(--text-soft); margin-top: 20px; }

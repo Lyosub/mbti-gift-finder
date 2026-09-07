@@ -121,7 +121,7 @@ foreach ($t in $typeList) {
   [void]$sb.Append(@"
 <header class="site">
   <a class="logo" href="../index.html">🎁 MBTI 선물찾기</a>
-  <nav><a href="../index.html">홈</a><a href="../guides/index.html">가이드</a></nav>
+  <nav><a href="../index.html">홈</a><a href="../test.html">테스트</a><a href="../guides/index.html">가이드</a></nav>
 </header>
 <div class="wrap">
   <nav class="breadcrumb"><a href="../index.html">홈</a><span>›</span><a href="../index.html#types">MBTI 유형별 선물</a><span>›</span>$($t.code)</nav>
@@ -242,6 +242,7 @@ $homeHtml = (Head $homeTitle $homeDesc "$site/" "website" "assets/style.css" $ho
 <header class="site">
   <a class="logo" href="index.html">🎁 MBTI 선물찾기</a>
   <nav>
+    <a href="test.html">MBTI 테스트</a>
     <a href="guides/index.html">가이드</a>
     <a href="games/index.html">미니게임</a>
     <a href="community.html">제보</a>
@@ -257,7 +258,8 @@ $homeHtml = (Head $homeTitle $homeDesc "$site/" "website" "assets/style.css" $ho
   <div class="grid16" id="types">
 $grid  </div>
 
-  <button class="random-btn" id="randomBtn">🎲 MBTI를 모르겠으면, 랜덤으로 보기</button>
+  <a class="random-btn" href="test.html" style="text-decoration:none;">🧩 내 MBTI부터 모르겠다면 — 1분 테스트</a>
+  <button class="random-btn" id="randomBtn" style="margin-top:8px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">🎲 그냥 랜덤으로 보기</button>
 
   <div class="ad-slot" data-ad-slot=""></div>
 
@@ -357,7 +359,7 @@ foreach ($a in $gdata.articleGuides) {
   [void]$sb.Append(@"
 <header class="site">
   <a class="logo" href="../index.html">🎁 MBTI 선물찾기</a>
-  <nav><a href="../index.html">홈</a><a href="index.html">가이드</a></nav>
+  <nav><a href="../index.html">홈</a><a href="../test.html">테스트</a><a href="index.html">가이드</a></nav>
 </header>
 <div class="wrap">
   <nav class="breadcrumb"><a href="../index.html">홈</a><span>›</span><a href="index.html">선물 가이드</a><span>›</span>$(HtmlEnc $a.h1)</nav>
@@ -406,7 +408,7 @@ foreach ($m in $gdata.mbtiGuides) {
   [void]$sb.Append(@"
 <header class="site">
   <a class="logo" href="../index.html">🎁 MBTI 선물찾기</a>
-  <nav><a href="../index.html">홈</a><a href="index.html">가이드</a></nav>
+  <nav><a href="../index.html">홈</a><a href="../test.html">테스트</a><a href="index.html">가이드</a></nav>
 </header>
 <div class="wrap">
   <nav class="breadcrumb"><a href="../index.html">홈</a><span>›</span><a href="index.html">선물 가이드</a><span>›</span>$(HtmlEnc $m.h1)</nav>
@@ -462,7 +464,7 @@ $giLd = @"
 $giHtml = (Head "선물 가이드 모음 | MBTI 선물찾기" "관계별 선물, 예산, 매너, 타이밍, 포장까지 — 선물 고를 때 알아두면 좋은 가이드를 모았어요." "$site/guides/index.html" "website" "../assets/style.css" $giLd) + @"
 <header class="site">
   <a class="logo" href="../index.html">🎁 MBTI 선물찾기</a>
-  <nav><a href="../index.html">홈</a><a href="index.html">가이드</a></nav>
+  <nav><a href="../index.html">홈</a><a href="../test.html">테스트</a><a href="index.html">가이드</a></nav>
 </header>
 <div class="wrap">
   <nav class="breadcrumb"><a href="../index.html">홈</a><span>›</span>선물 가이드</nav>
@@ -490,6 +492,7 @@ $sm = [System.Text.StringBuilder]::new()
 [void]$sm.AppendLine('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
 function SmUrl($loc, $pri) { "  <url><loc>$loc</loc><lastmod>$today</lastmod><changefreq>weekly</changefreq><priority>$pri</priority></url>" }
 [void]$sm.AppendLine((SmUrl "$site/" "1.0"))
+[void]$sm.AppendLine((SmUrl "$site/test.html" "0.9"))
 foreach ($t in $typeList) { [void]$sm.AppendLine((SmUrl "$site/types/$($t.slug).html" "0.9")) }
 [void]$sm.AppendLine((SmUrl "$site/guides/index.html" "0.7"))
 foreach ($a in $gdata.articleGuides) { [void]$sm.AppendLine((SmUrl "$site/guides/$($a.slug).html" "0.7")) }
