@@ -70,7 +70,9 @@ foreach ($t in $typeList) { $byCode[$t.code] = $t }
 
 function RelatedTypes($t) {
   $same = $typeList | Where-Object { $_.group -eq $t.group -and $_.code -ne $t.code }
-  $others = $typeList | Where-Object { $_.group -ne $t.group } | Get-Random -Count 2
+  $otherPool = @($typeList | Where-Object { $_.group -ne $t.group })
+  $idx = [array]::IndexOf(($typeList | ForEach-Object { $_.code }), $t.code)
+  $others = @($otherPool[$idx % $otherPool.Count], $otherPool[($idx + 5) % $otherPool.Count])
   $picks = @($same) + @($others)
   $html = '<div class="related-cards">'
   foreach ($r in $picks) {
@@ -302,6 +304,179 @@ $FooterCommon
 [System.IO.File]::WriteAllText((Join-Path $root "index.html"), $homeHtml, (New-Object System.Text.UTF8Encoding($false)))
 Write-Host "  index.html"
 
+# ---------- 가이드 페이지 ----------
+$gdata = Get-Content -Raw -Encoding UTF8 (Join-Path $root "data\guides.json") | ConvertFrom-Json
+$groupBlurb = @{
+  nt = "쓸모와 효율을 증명해야 마음이 움직여요. 작업환경·생산성 도구, 취향을 저격한 '한 끗 다른' 디자인."
+  nf = "물건보다 그 안에 담긴 '이야기'가 핵심. 손편지, 커스텀 제작, 함께하는 경험."
+  sj = "품질 좋고 오래 쓰는 검증된 실용품. 이미 쓰는 물건의 '한 단계 위 버전'이 안전합니다."
+  sp = "지금 당장 즐길 수 있는 것, 감각적으로 예쁜 것, 함께 노는 경험."
+}
+$groupOrder = @("nt","nf","sj","sp")
+
+function GuideRelated($slugs) {
+  $names = @{
+    "budget-by-relationship"="관계별 선물 예산"; "gift-fail-checklist"="선물 실패 체크리스트";
+    "couple-gift-etiquette"="커플 선물 매너"; "coworker-gift-manners"="직장 선물 매너";
+    "birthday-timing"="생일선물 준비 타이밍"; "gift-wrapping-tips"="선물 포장 팁";
+    "disappointing-gifts"="유형별 실망하는 선물"; "girlfriend-gift"="여자친구 선물";
+    "boyfriend-gift"="남자친구 선물"; "friend-birthday-gift"="친구 생일선물";
+    "mom-birthday-gift"="엄마 생일선물"; "dad-birthday-gift"="아빠 생일선물";
+    "coworker-boss-gift"="직장 동료·상사 선물"; "housewarming-gift"="집들이 선물"; "christmas-gift"="크리스마스 선물"
+  }
+  $h = '<div class="related-cards">'
+  foreach ($s in $slugs) { if ($names[$s]) { $h += '<a href="' + $s + '.html"><span class="rc-code">' + (HtmlEnc $names[$s]) + '</span></a>' } }
+  $h += '<a href="../index.html"><span class="rc-code">MBTI 16유형 전체 보기</span></a>'
+  $h += '</div>'
+  return $h
+}
+
+# 아티클형 가이드
+foreach ($a in $gdata.articleGuides) {
+  $canonical = "$site/guides/$($a.slug).html"
+  $faqLd = ($a.faq | ForEach-Object { '{"@type":"Question","name":' + (JsonStr $_.q) + ',"acceptedAnswer":{"@type":"Answer","text":' + (JsonStr $_.a) + '}}' }) -join ","
+  $ld = @"
+[
+ {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+   {"@type":"ListItem","position":1,"name":"홈","item":"$site/"},
+   {"@type":"ListItem","position":2,"name":"선물 가이드","item":"$site/guides/index.html"},
+   {"@type":"ListItem","position":3,"name":$(JsonStr $a.h1),"item":"$canonical"}]},
+ {"@context":"https://schema.org","@type":"Article","headline":$(JsonStr $a.title),"description":$(JsonStr $a.desc),"inLanguage":"ko-KR","datePublished":"$($gdata.updated)","dateModified":"$($gdata.updated)","mainEntityOfPage":"$canonical","author":{"@type":"Organization","name":"MBTI 선물찾기"},"publisher":{"@type":"Organization","name":"MBTI 선물찾기","url":"$site/"}},
+ {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[$faqLd]}
+]
+"@
+  $sb = [System.Text.StringBuilder]::new()
+  [void]$sb.Append((Head $a.title $a.desc $canonical "article" "../assets/style.css" $ld))
+  [void]$sb.Append(@"
+<header class="site">
+  <a class="logo" href="../index.html">🎁 MBTI 선물찾기</a>
+  <nav><a href="../index.html">홈</a><a href="index.html">가이드</a></nav>
+</header>
+<div class="wrap">
+  <nav class="breadcrumb"><a href="../index.html">홈</a><span>›</span><a href="index.html">선물 가이드</a><span>›</span>$(HtmlEnc $a.h1)</nav>
+  <section class="type-hero">
+    <span class="badge guide">선물 가이드</span>
+    <h1>$(HtmlEnc $a.h1)</h1>
+    <p class="lead">$(HtmlEnc $a.lead)</p>
+  </section>
+  <div class="article">
+"@)
+  $sc = 0
+  foreach ($s in $a.sections) {
+    [void]$sb.Append("    <h2>" + (HtmlEnc $s.h2) + "</h2>`n")
+    foreach ($p in $s.p) { [void]$sb.Append("    <p>" + (HtmlEnc $p) + "</p>`n") }
+    $sc++
+    if ($sc -eq 2) { [void]$sb.Append('  </div>' + "`n" + '  <div class="ad-slot" data-ad-slot=""></div>' + "`n" + '  <div class="article">' + "`n") }
+  }
+  [void]$sb.Append("  </div>`n")
+  [void]$sb.Append("  <section class=`"faq`">`n    <h2>자주 묻는 질문</h2>`n")
+  foreach ($f in $a.faq) { [void]$sb.Append("    <details><summary>" + (HtmlEnc $f.q) + "</summary><div class=`"fa`">" + (HtmlEnc $f.a) + "</div></details>`n") }
+  [void]$sb.Append("  </section>`n")
+  [void]$sb.Append('  <div class="ad-slot" data-ad-slot=""></div>' + "`n")
+  [void]$sb.Append("  <section class=`"related`">`n    <h3>관련 가이드</h3>`n    " + (GuideRelated $a.related) + "`n  </section>`n")
+  [void]$sb.Append("  <p class=`"aff-disclosure`" id=`"affDisclosure`"></p>`n</div>`n")
+  [void]$sb.Append($FooterCommon + "`n<script src=`"../assets/affiliate.js`"></script>`n</body>`n</html>`n")
+  [System.IO.File]::WriteAllText((Join-Path $root ("guides\" + $a.slug + ".html")), $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+  Write-Host "  guides/$($a.slug).html"
+}
+
+# MBTI 성향형 가이드
+foreach ($m in $gdata.mbtiGuides) {
+  $canonical = "$site/guides/$($m.slug).html"
+  $faqLd = ($m.faq | ForEach-Object { '{"@type":"Question","name":' + (JsonStr $_.q) + ',"acceptedAnswer":{"@type":"Answer","text":' + (JsonStr $_.a) + '}}' }) -join ","
+  $ld = @"
+[
+ {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+   {"@type":"ListItem","position":1,"name":"홈","item":"$site/"},
+   {"@type":"ListItem","position":2,"name":"선물 가이드","item":"$site/guides/index.html"},
+   {"@type":"ListItem","position":3,"name":$(JsonStr $m.h1),"item":"$canonical"}]},
+ {"@context":"https://schema.org","@type":"Article","headline":$(JsonStr $m.title),"description":$(JsonStr $m.desc),"inLanguage":"ko-KR","datePublished":"$($gdata.updated)","dateModified":"$($gdata.updated)","mainEntityOfPage":"$canonical","author":{"@type":"Organization","name":"MBTI 선물찾기"},"publisher":{"@type":"Organization","name":"MBTI 선물찾기","url":"$site/"}},
+ {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[$faqLd]}
+]
+"@
+  $sb = [System.Text.StringBuilder]::new()
+  [void]$sb.Append((Head $m.title $m.desc $canonical "article" "../assets/style.css" $ld))
+  [void]$sb.Append(@"
+<header class="site">
+  <a class="logo" href="../index.html">🎁 MBTI 선물찾기</a>
+  <nav><a href="../index.html">홈</a><a href="index.html">가이드</a></nav>
+</header>
+<div class="wrap">
+  <nav class="breadcrumb"><a href="../index.html">홈</a><span>›</span><a href="index.html">선물 가이드</a><span>›</span>$(HtmlEnc $m.h1)</nav>
+  <section class="type-hero">
+    <span class="badge guide">선물 가이드</span>
+    <h1>$(HtmlEnc $m.h1)</h1>
+    <p class="lead">$(HtmlEnc $m.lead)</p>
+  </section>
+  <div class="article">
+"@)
+  foreach ($p in $m.intro) { [void]$sb.Append("    <p>" + (HtmlEnc $p) + "</p>`n") }
+  [void]$sb.Append("  </div>`n")
+  [void]$sb.Append('  <div class="ad-slot" data-ad-slot=""></div>' + "`n")
+  [void]$sb.Append("  <div class=`"article`">`n    <h2>성향 그룹별로 좁히기</h2>`n")
+  foreach ($grp in $groupOrder) {
+    $gg = $data.groups.$grp
+    $members = $typeList | Where-Object { $_.group -eq $grp }
+    [void]$sb.Append("    <h3 style=`"color:$($gg.color)`">" + (HtmlEnc $gg.name) + " · " + (($members | ForEach-Object { $_.code }) -join "·") + "</h3>`n")
+    [void]$sb.Append("    <p>" + (HtmlEnc $groupBlurb[$grp]) + "</p>`n")
+    [void]$sb.Append("    <div class=`"related-cards`">`n")
+    foreach ($mem in $members) {
+      [void]$sb.Append('      <a href="../types/' + $mem.slug + '.html"><span class="rc-code">' + $mem.code + ' 선물 →</span><span class="rc-nick">' + (HtmlEnc $mem.nick) + '</span></a>' + "`n")
+    }
+    [void]$sb.Append("    </div>`n")
+  }
+  [void]$sb.Append("    <h2>$(HtmlEnc $m.relLabel)에게 피해야 할 선물</h2>`n    <div class=`"chips`">`n")
+  foreach ($x in $m.avoid) { [void]$sb.Append("      <span class=`"chip bad`">" + (HtmlEnc $x) + "</span>`n") }
+  [void]$sb.Append("    </div>`n  </div>`n")
+  [void]$sb.Append('  <div class="ad-slot" data-ad-slot=""></div>' + "`n")
+  [void]$sb.Append("  <section class=`"faq`">`n    <h2>자주 묻는 질문</h2>`n")
+  foreach ($f in $m.faq) { [void]$sb.Append("    <details><summary>" + (HtmlEnc $f.q) + "</summary><div class=`"fa`">" + (HtmlEnc $f.a) + "</div></details>`n") }
+  [void]$sb.Append("  </section>`n")
+  [void]$sb.Append("  <div class=`"cta-band`">`n    <p>줄 사람의 MBTI를 알고 있다면?</p>`n    <a href=`"../index.html`">16유형 한눈에 보기</a>`n  </div>`n")
+  [void]$sb.Append("  <section class=`"related`">`n    <h3>관련 가이드</h3>`n    " + (GuideRelated @("girlfriend-gift","boyfriend-gift","friend-birthday-gift","mom-birthday-gift","dad-birthday-gift","housewarming-gift")) + "`n  </section>`n")
+  [void]$sb.Append("  <p class=`"aff-disclosure`" id=`"affDisclosure`"></p>`n</div>`n")
+  [void]$sb.Append($FooterCommon + "`n<script src=`"../assets/affiliate.js`"></script>`n</body>`n</html>`n")
+  [System.IO.File]::WriteAllText((Join-Path $root ("guides\" + $m.slug + ".html")), $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+  Write-Host "  guides/$($m.slug).html"
+}
+
+# 가이드 인덱스
+$allG = @()
+foreach ($a in $gdata.articleGuides) { $allG += [pscustomobject]@{ slug=$a.slug; title=$a.h1; desc=$a.desc } }
+foreach ($m in $gdata.mbtiGuides) { $allG += [pscustomobject]@{ slug=$m.slug; title=$m.h1; desc=$m.desc } }
+$giCards = ($allG | ForEach-Object {
+  '    <a class="guide-card" href="' + $_.slug + '.html"><span class="g-title">' + (HtmlEnc $_.title) + '</span><span class="g-desc">' + (HtmlEnc $_.desc) + '</span></a>'
+}) -join "`n"
+$giLd = @"
+[{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"홈","item":"$site/"},
+ {"@type":"ListItem","position":2,"name":"선물 가이드","item":"$site/guides/index.html"}]}]
+"@
+$giHtml = (Head "선물 가이드 모음 | MBTI 선물찾기" "관계별 선물, 예산, 매너, 타이밍, 포장까지 — 선물 고를 때 알아두면 좋은 가이드를 모았어요." "$site/guides/index.html" "website" "../assets/style.css" $giLd) + @"
+<header class="site">
+  <a class="logo" href="../index.html">🎁 MBTI 선물찾기</a>
+  <nav><a href="../index.html">홈</a><a href="index.html">가이드</a></nav>
+</header>
+<div class="wrap">
+  <nav class="breadcrumb"><a href="../index.html">홈</a><span>›</span>선물 가이드</nav>
+  <section class="hero">
+    <h1>선물 가이드 모음</h1>
+    <p>MBTI 유형별 추천과 함께, 누구에게나 통하는 선물의 기본기를 정리했어요.</p>
+  </section>
+  <div class="guide-grid">
+$giCards
+  </div>
+  <div class="ad-slot" data-ad-slot=""></div>
+  <p class="aff-disclosure" id="affDisclosure"></p>
+</div>
+$FooterCommon
+<script src="../assets/affiliate.js"></script>
+</body>
+</html>
+"@
+[System.IO.File]::WriteAllText((Join-Path $root "guides\index.html"), $giHtml, (New-Object System.Text.UTF8Encoding($false)))
+Write-Host "  guides/index.html"
+
 # ---------- sitemap ----------
 $sm = [System.Text.StringBuilder]::new()
 [void]$sm.AppendLine('<?xml version="1.0" encoding="UTF-8"?>')
@@ -309,8 +484,9 @@ $sm = [System.Text.StringBuilder]::new()
 function SmUrl($loc, $pri) { "  <url><loc>$loc</loc><lastmod>$today</lastmod><changefreq>weekly</changefreq><priority>$pri</priority></url>" }
 [void]$sm.AppendLine((SmUrl "$site/" "1.0"))
 foreach ($t in $typeList) { [void]$sm.AppendLine((SmUrl "$site/types/$($t.slug).html" "0.9")) }
-$guides = @("index","budget-by-relationship","gift-fail-checklist","couple-gift-etiquette","coworker-gift-manners","birthday-timing","gift-wrapping-tips","disappointing-gifts","dad-birthday-gift","mom-birthday-gift","girlfriend-gift","boyfriend-gift","friend-birthday-gift","coworker-boss-gift")
-foreach ($g in $guides) { [void]$sm.AppendLine((SmUrl "$site/guides/$g.html" "0.75")) }
+[void]$sm.AppendLine((SmUrl "$site/guides/index.html" "0.7"))
+foreach ($a in $gdata.articleGuides) { [void]$sm.AppendLine((SmUrl "$site/guides/$($a.slug).html" "0.7")) }
+foreach ($m in $gdata.mbtiGuides) { [void]$sm.AppendLine((SmUrl "$site/guides/$($m.slug).html" "0.8")) }
 foreach ($p in @("about.html","privacy.html","community.html","games/index.html")) { [void]$sm.AppendLine((SmUrl "$site/$p" "0.4")) }
 [void]$sm.AppendLine('</urlset>')
 [System.IO.File]::WriteAllText((Join-Path $root "sitemap.xml"), $sm.ToString(), (New-Object System.Text.UTF8Encoding($false)))
