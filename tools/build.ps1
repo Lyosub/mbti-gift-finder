@@ -27,12 +27,19 @@ $GA = @'
 </script>
 '@
 
+# 애드센스: 게시자 ID가 있으면 전 페이지 <head>에 스니펫을 넣는다(소유권 확인 + 자동 광고).
+$adsenseClient = "ca-pub-2249886041953163"
+$ADSENSE = ""
+if ($adsenseClient) {
+  $ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + $adsenseClient + '" crossorigin="anonymous"></script>' + "`n"
+}
+
 function Head($title, $desc, $canonical, $ogType, $cssPath, $ldJson) {
 @"
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-$GA<meta charset="UTF-8">
+$GA$ADSENSE<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$(HtmlEnc $title)</title>
 <meta name="description" content="$(HtmlEnc $desc)">

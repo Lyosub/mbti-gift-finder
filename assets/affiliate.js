@@ -16,7 +16,7 @@
     trackingCode: "AF6167749"
   };
   var ADSENSE = {
-    client: ""   // 예: "ca-pub-0000000000000000"
+    client: "ca-pub-2249886041953163"
   };
 
   // 쿠팡 링크 생성 — 상품명(검색어)을 받아 URL을 돌려준다.
@@ -41,28 +41,25 @@
     var disc = document.getElementById("affDisclosure");
     if (disc) disc.textContent = window.COUPANG_DISCLOSURE;
 
-    // 애드센스
-    if (ADSENSE.client && /^ca-pub-\d+$/.test(ADSENSE.client)) {
-      var s = document.createElement("script");
-      s.async = true;
-      s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + ADSENSE.client;
-      s.crossOrigin = "anonymous";
-      document.head.appendChild(s);
-      document.querySelectorAll(".ad-slot").forEach(function (slot) {
+    // 애드센스: 로더 스크립트는 각 페이지 <head>에 정적으로 들어 있다(자동 광고).
+    // 여기서는 명시적 광고 단위(.ad-slot[data-ad-slot="숫자"])만 채운다.
+    // 아직 광고 단위 ID가 없으면(승인 전/자동광고만 사용) .ad-slot 은 숨긴다.
+    var hasClient = ADSENSE.client && /^ca-pub-\d+$/.test(ADSENSE.client);
+    document.querySelectorAll(".ad-slot").forEach(function (slot) {
+      var unit = slot.getAttribute("data-ad-slot");
+      if (hasClient && unit && /^\d+$/.test(unit)) {
         var ins = document.createElement("ins");
         ins.className = "adsbygoogle";
         ins.style.display = "block";
         ins.setAttribute("data-ad-client", ADSENSE.client);
-        var unit = slot.getAttribute("data-ad-slot");
-        if (unit) ins.setAttribute("data-ad-slot", unit);
+        ins.setAttribute("data-ad-slot", unit);
         ins.setAttribute("data-ad-format", "auto");
         ins.setAttribute("data-full-width-responsive", "true");
         slot.appendChild(ins);
         try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
-      });
-    } else {
-      // 승인 전에는 광고 자리를 비워둔다(레이아웃만 유지)
-      document.querySelectorAll(".ad-slot").forEach(function (slot) { slot.style.display = "none"; });
-    }
+      } else {
+        slot.style.display = "none";
+      }
+    });
   });
 })();
