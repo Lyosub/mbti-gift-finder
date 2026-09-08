@@ -259,6 +259,7 @@ $homeHtml = (Head $homeTitle $homeDesc "$site/" "website" "assets/style.css" $ho
 $grid  </div>
 
   <a class="random-btn" href="test.html" style="text-decoration:none;">🧩 내 MBTI부터 모르겠다면 — 1분 테스트</a>
+  <a class="random-btn" href="pc-test.html" style="text-decoration:none;margin-top:8px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">🎨 퍼스널컬러도 1분 테스트 — 톤별 선물</a>
   <button class="random-btn" id="randomBtn" style="margin-top:8px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">🎲 그냥 랜덤으로 보기</button>
 
   <div class="ad-slot" data-ad-slot=""></div>
@@ -372,7 +373,8 @@ foreach ($a in $gdata.articleGuides) {
 "@)
   $sc = 0
   foreach ($s in $a.sections) {
-    [void]$sb.Append("    <h2>" + (HtmlEnc $s.h2) + "</h2>`n")
+    $h2id = if ($s.PSObject.Properties['id'] -and $s.id) { ' id="' + $s.id + '"' } else { '' }
+    [void]$sb.Append("    <h2$h2id>" + (HtmlEnc $s.h2) + "</h2>`n")
     foreach ($p in $s.p) { [void]$sb.Append("    <p>" + (HtmlEnc $p) + "</p>`n") }
     $sc++
     if ($sc -eq 2) { [void]$sb.Append('  </div>' + "`n" + '  <div class="ad-slot" data-ad-slot=""></div>' + "`n" + '  <div class="article">' + "`n") }
@@ -493,6 +495,7 @@ $sm = [System.Text.StringBuilder]::new()
 function SmUrl($loc, $pri) { "  <url><loc>$loc</loc><lastmod>$today</lastmod><changefreq>weekly</changefreq><priority>$pri</priority></url>" }
 [void]$sm.AppendLine((SmUrl "$site/" "1.0"))
 [void]$sm.AppendLine((SmUrl "$site/test.html" "0.9"))
+[void]$sm.AppendLine((SmUrl "$site/pc-test.html" "0.9"))
 foreach ($t in $typeList) { [void]$sm.AppendLine((SmUrl "$site/types/$($t.slug).html" "0.9")) }
 [void]$sm.AppendLine((SmUrl "$site/guides/index.html" "0.7"))
 foreach ($a in $gdata.articleGuides) { [void]$sm.AppendLine((SmUrl "$site/guides/$($a.slug).html" "0.7")) }

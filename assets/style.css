@@ -779,3 +779,18 @@ footer.site {
 }
 .mt-grid a:hover { border-color: var(--nt); }
 .mt-grid a.cur { border-color: var(--nt); background: rgba(124,92,255,0.08); color: var(--nt); }
+
+/* 퍼스널컬러 테스트 (pc-test.html) — mt-* 를 대부분 재사용 */
+.pc-result-type { color: var(--sp); font-size: 30px; letter-spacing: 0; }
+.pc-grid { grid-template-columns: repeat(4, 1fr); }
+.pc-grid a.cur { border-color: var(--sp); background: rgba(255,159,28,0.10); color: var(--sp); }
+.pc-grid a:hover { border-color: var(--sp); }
+.pc-sec-lab {
+  font-size: 12px; font-weight: 700; color: var(--text-soft);
+  margin: 18px 0 8px; text-align: center;
+}
+.pc-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 360px; margin: 0 auto; }
+.pc-chip {
+  font-size: 12.5px; border: 1px solid var(--border); border-radius: 999px;
+  padding: 5px 12px; color: var(--text); background: #fff;
+}

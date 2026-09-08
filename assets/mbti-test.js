@@ -101,7 +101,7 @@
         '<button type="button" id="mtShare">결과 공유하기</button>' +
         '<button type="button" id="mtRetry">다시 하기</button>' +
       '</div>' +
-      '<p class="mt-teaser">연인·친구 유형도 같이 테스트해서 서로에게 선물 힌트를 주고받아 보세요.</p>' +
+      '<p class="mt-teaser">연인·친구 유형도 같이 테스트해서 서로에게 선물 힌트를 주고받아 보세요. <a href="pc-test.html">퍼스널컬러 테스트 →</a></p>' +
       '<div class="mt-grid-head">다른 유형 선물도 궁금하다면</div>' +
       typeGrid(type) +
       '<p class="mt-disclaimer">간이 테스트예요. 정확한 검사는 전문 기관의 MBTI 검사를 이용하세요.</p>';
