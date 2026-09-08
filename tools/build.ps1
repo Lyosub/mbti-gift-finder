@@ -380,6 +380,17 @@ foreach ($a in $gdata.articleGuides) {
     if ($sc -eq 2) { [void]$sb.Append('  </div>' + "`n" + '  <div class="ad-slot" data-ad-slot=""></div>' + "`n" + '  <div class="article">' + "`n") }
   }
   [void]$sb.Append("  </div>`n")
+  if ($a.PSObject.Properties['affLinks'] -and $a.affLinks) {
+    [void]$sb.Append("  <div class=`"aff-box`">`n    <h2>여기서 준비하기</h2>`n    <div class=`"aff-links`">`n")
+    foreach ($l in $a.affLinks) {
+      if ($l.PSObject.Properties['travel'] -and $l.travel) {
+        [void]$sb.Append('      <a data-travel="' + $l.travel + '" data-q="' + (HtmlEnc $l.q) + '">' + (HtmlEnc $l.label) + '</a>' + "`n")
+      } else {
+        [void]$sb.Append('      <a data-cou-q="' + (HtmlEnc $l.cou) + '">' + (HtmlEnc $l.label) + '</a>' + "`n")
+      }
+    }
+    [void]$sb.Append("    </div>`n  </div>`n")
+  }
   [void]$sb.Append("  <section class=`"faq`">`n    <h2>자주 묻는 질문</h2>`n")
   foreach ($f in $a.faq) { [void]$sb.Append("    <details><summary>" + (HtmlEnc $f.q) + "</summary><div class=`"fa`">" + (HtmlEnc $f.a) + "</div></details>`n") }
   [void]$sb.Append("  </section>`n")
