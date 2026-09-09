@@ -1,9 +1,13 @@
 /* 제휴 링크 + 광고 로더 — 한 곳에서 관리한다.
  *
- * [쿠팡 파트너스]
+ * [쿠팡 파트너스]  채널 아이디: mbtigift (2026-09-09 생성, 최종 승인 대기 중)
  *   승인 전: 상품 버튼은 쿠팡 통합검색으로 연결된다(수익 없음, rel=sponsored nofollow).
- *   승인 후: 아래 COUPANG.enabled 를 true 로 바꾸고, 파트너스에서 발급한
- *           서브아이디/트래킹코드를 COUPANG.trackingCode 에 넣으면 전 페이지 링크가 한 번에 바뀐다.
+ *   승인 후: COUPANG.enabled = true 로 바꾼다.
+ *   ※ 주의: 지금 couLink()가 만드는 raw 검색 URL(coupang.com/np/search?...&traceid=)은
+ *     쿠팡 파트너스가 추적·정산하지 않는다. 승인 후 아래 중 하나로 재작성 필요:
+ *       (a) 쿠팡 파트너스 "자동 링크(다이나믹)" 스크립트를 페이지에 삽입
+ *       (b) 딥링크 API로 빌드 시 link.coupang.com/a/... 추적 링크 생성
+ *     그때 COUPANG.trackingCode(현재 채널 아이디 mbtigift)를 subId로 넘긴다.
  *
  * [여행 제휴 — 클룩 / 아고다 / 마이리얼트립]
  *   승인 전: 여행 버튼은 각 파트너 검색/홈으로 연결된다(수익 없음, rel=sponsored nofollow).
@@ -23,7 +27,7 @@
 (function () {
   var COUPANG = {
     enabled: false,
-    trackingCode: "AF6167749"
+    trackingCode: "mbtigift"   // 쿠팡 파트너스 채널 아이디 (최종 승인 후 링크 방식 재작성 필요 — 상단 주석 참고)
   };
   var TRAVEL = {
     enabled: false,
