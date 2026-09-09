@@ -511,7 +511,7 @@ foreach ($t in $typeList) { [void]$sm.AppendLine((SmUrl "$site/types/$($t.slug).
 [void]$sm.AppendLine((SmUrl "$site/guides/index.html" "0.7"))
 foreach ($a in $gdata.articleGuides) { [void]$sm.AppendLine((SmUrl "$site/guides/$($a.slug).html" "0.7")) }
 foreach ($m in $gdata.mbtiGuides) { [void]$sm.AppendLine((SmUrl "$site/guides/$($m.slug).html" "0.8")) }
-foreach ($p in @("about.html","privacy.html","community.html","games/index.html")) { [void]$sm.AppendLine((SmUrl "$site/$p" "0.4")) }
+foreach ($p in @("about.html","privacy.html","community.html","games/index.html","coupang-picks.html")) { [void]$sm.AppendLine((SmUrl "$site/$p" "0.4")) }
 [void]$sm.AppendLine('</urlset>')
 [System.IO.File]::WriteAllText((Join-Path $root "sitemap.xml"), $sm.ToString(), (New-Object System.Text.UTF8Encoding($false)))
 Write-Host "  sitemap.xml"
