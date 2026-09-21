@@ -1,0 +1,46 @@
+name: Supabase 유지 (무료 프로젝트 자동 정지 방지)
+
+# 이 사이트의 커뮤니티(community.html)가 쓰는 Supabase 무료 프로젝트는
+# 7일 동안 사용이 없으면 자동으로 정지된다(2026-09-21에 실제로 정지됨).
+# 정지되면 제보·투표가 안 되고, 90일이 지나면 복구도 못 한다.
+# 그래서 주 2회(월·목) 가볍게 읽기 요청을 보내 "사용 중"으로 유지한다.
+#
+#  - 월·목 사이 최대 간격이 4일이라 7일 기준보다 충분히 짧다.
+#  - 키와 주소는 사이트 설정 파일(assets/supabase-config.js)에서 읽는다. 공개 가능한
+#    publishable 키만 쓰며, 별도 시크릿은 필요 없다.
+#  - 응답이 200이 아니면 워크플로를 실패시킨다 → GitHub 이 저장소 소유자에게 메일을 보낸다.
+#    (정지됐을 가능성이 크다. supabase.com 대시보드에서 Restore project 를 누른다.)
+
+on:
+  schedule:
+    - cron: "17 3 * * 1,4"   # UTC 03:17 = KST 12:17, 월·목
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 프로젝트 깨우기 (읽기 요청)
+        run: |
+          set -uo pipefail
+          URL=$(grep -oE 'https://[a-z0-9]+\.supabase\.co' assets/supabase-config.js | head -1)
+          KEY=$(grep -oE 'sb_publishable_[A-Za-z0-9_-]+' assets/supabase-config.js | head -1)
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "::error::assets/supabase-config.js 에서 주소나 키를 찾지 못했습니다."
+            exit 1
+          fi
+          CODE=$(curl -s -o /tmp/resp.txt -w '%{http_code}' -m 30 \
+            "$URL/rest/v1/gift_reports?select=id&limit=1" -H "apikey: $KEY")
+          echo "응답 코드: $CODE"
+          if [ "$CODE" = "200" ]; then
+            echo "::notice::Supabase 프로젝트가 살아 있습니다."
+            exit 0
+          fi
+          echo "응답 본문(앞부분):"; head -c 300 /tmp/resp.txt; echo
+          echo "::error::Supabase 응답이 이상합니다(HTTP $CODE). 무료 프로젝트가 정지됐을 수 있습니다. supabase.com 대시보드에서 Restore project 를 누르세요."
+          exit 1
