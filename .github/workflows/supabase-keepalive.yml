@@ -44,3 +44,16 @@ jobs:
           echo "응답 본문(앞부분):"; head -c 300 /tmp/resp.txt; echo
           echo "::error::Supabase 응답이 이상합니다(HTTP $CODE). 무료 프로젝트가 정지됐을 수 있습니다. supabase.com 대시보드에서 Restore project 를 누르세요."
           exit 1
+
+      - name: 실패 시 카톡 알림
+        if: failure()
+        env:
+          TOK: ${{ secrets.NOTIFY_TRIGGER_PAT }}
+        run: |
+          set -uo pipefail
+          MSG="[MBTI 선물찾기] Supabase 유지 점검 실패. 무료 프로젝트가 정지됐을 수 있습니다. 확인: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          printf '{"ref":"main","inputs":{"message":%s}}' "$(printf '%s' "$MSG" | jq -Rs .)" > /tmp/notify.json
+          curl -s -o /dev/null -w '카톡 알림 트리거 HTTP %{http_code}\n' -X POST \
+            "https://api.github.com/repos/Lyosub/NEW-BRAIN/actions/workflows/kakao-notify.yml/dispatches" \
+            -H "Authorization: Bearer $TOK" -H "Accept: application/vnd.github+json" \
+            --data-binary "@/tmp/notify.json"
