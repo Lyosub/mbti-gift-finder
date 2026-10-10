@@ -1,4 +1,8 @@
-﻿# MBTI 선물찾기 정적 사이트 빌더
+﻿# ⚠ 2026-10-10: 이 스크립트를 그대로 돌리지 말 것.
+#   9/27 이후 가이드 15편 이상(holiday-far-away·gifticon·mbti-nicknames 등)은 손으로 쓴 HTML이라 guides.json에 없고,
+#   유형 페이지에는 <!-- extra:start --> 보강 블록이 직접 들어가 있다. 이 스크립트는 types/*.html·index.html·guides/index.html·sitemap.xml을
+#   통째로 다시 써서 그 내용이 모두 사라진다. 새 가이드는 기존 HTML을 본떠 추가하고 guides/index.html·sitemap.xml에 직접 넣는다.
+# MBTI 선물찾기 정적 사이트 빌더
 # data/mbti.json + 템플릿 -> types/*.html, index.html, sitemap.xml 재생성
 # 실행: pwsh 또는 Windows PowerShell 에서  ./tools/build.ps1  (프로젝트 루트에서)
 

@@ -808,3 +808,9 @@ footer.site {
   padding: 9px 14px; transition: border-color .12s;
 }
 .aff-links a:hover { border-color: var(--sp); }
+
+/* 표 (탄생석 가이드 등, 2026-10-10) */
+.table-wrap { overflow-x: auto; margin: 8px 0 12px; }
+.simple-table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--card-bg); }
+.simple-table th, .simple-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+.simple-table th { background: #f3f1ff; font-weight: 700; white-space: nowrap; }
